@@ -1,0 +1,454 @@
+substitutions:
+  name: waveshare
+  name_clean: waveshare
+  friendly_name: "Waveshare"
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  platformio_options:
+    build_flags: "-DBOARD_HAS_PSRAM"
+    board_build.arduino.memory_type: qio_opi
+    board_build.flash_mode: dio
+    board_upload.maximum_ram_size: 524288
+  libraries:
+    - ttlappalainen/NMEA2000-library
+  includes: 
+    - "/config/esphome/nmea2k/GwTimer.h"
+    - "/config/esphome/nmea2k/nmea2k_sensor.h"
+    - "/config/esphome/nmea2k/Nmea2kTwai.cpp"
+    - "/config/esphome/nmea2k/Nmea2kTwai.h"
+
+
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_ESP32S3_DEFAULT_CPU_FREQ_240: y
+      CONFIG_ESP32S3_DATA_CACHE_64KB: y
+      CONFIG_SPIRAM_FETCH_INSTRUCTIONS: y
+      CONFIG_SPIRAM_RODATA: y
+
+packages:
+  logger_base: !include common/logger.yaml
+  network_base: !include common/network.yaml
+  wifi_base: !include common/wifi.yaml
+  restart_base: !include common/restart_control.yaml
+  status_base: !include common/status_control.yaml
+
+logger:
+  level: ERROR
+
+psram:
+  mode: octal
+  speed: 80MHz
+
+i2c:
+  sda: GPIO08
+  scl: GPIO09
+  scan: True
+  id: bus_a
+
+ch422g:
+  - id: ch422g_hub
+
+light:
+  - platform: binary
+    name: "Display Backlight"
+    output: display_backlight
+    restore_mode: RESTORE_DEFAULT_ON
+
+output:
+  - platform: gpio
+    id: display_backlight
+    pin:
+      ch422g: ch422g_hub
+      number: 2
+      mode:
+        output: true
+
+
+# Individual outputs
+switch:
+  - platform: gpio
+    internal: True
+    name: NC0
+    disabled_by_default: True
+    restore_mode: ALWAYS_ON
+    pin:
+      ch422g: ch422g_hub
+      number: 0
+      mode:
+        output: true
+  - platform: gpio
+    internal: True
+    name: CTP_RST
+    disabled_by_default: True
+    restore_mode: ALWAYS_ON
+    pin:
+      ch422g: ch422g_hub
+      number: 1
+      mode:
+        output: true
+  - platform: gpio
+    name: DISPLAY_RESET
+    disabled_by_default: True
+    restore_mode: ALWAYS_ON
+    pin:
+      ch422g: ch422g_hub
+      number: 3
+      mode:
+        output: true
+  - platform: gpio
+    name: SD_CHIPSELECT
+    disabled_by_default: True
+    restore_mode: ALWAYS_ON
+    pin:
+      ch422g: ch422g_hub
+      number: 4
+      mode:
+        output: true
+  - platform: gpio
+    name: USB_SEL
+    disabled_by_default: True
+    restore_mode: ALWAYS_ON
+    pin:
+      ch422g: ch422g_hub
+      number: 5
+      mode:
+        output: true
+
+sensor:
+- platform: custom
+  lambda: |-
+    auto my_component = new Nmea2kSensor();
+    App.register_component(my_component);
+    return { my_component->n2kstatus,
+    my_component->n2kaddress,
+    my_component->rx_error_counter,
+    my_component->tx_error_counter,
+    my_component->tx_failed,
+    my_component->rx_missed,
+    my_component->rx_overrun,
+    my_component->tx_timeouts,
+    my_component->sog,
+    my_component->cog,
+    my_component->lat,
+    my_component->lon };
+
+  sensors:
+    - id: n2kstatus
+      name: "NMEA 2000 Status"
+      accuracy_decimals: 0
+      icon: "mdi:gauge"
+      entity_category: "diagnostic"
+    - id: n2kaddress
+      name: "NMEA 2000 Address"
+      accuracy_decimals: 0
+      icon: "mdi:sign-real-estate"
+      entity_category: "diagnostic"
+    - id: rx_error_counter
+      name: "NMEA 2000 RX Errors"
+      accuracy_decimals: 0
+      icon: "mdi:alert-circle"
+      entity_category: "diagnostic"
+    - id: tx_error_counter
+      name: "NMEA 2000 TX Errors"
+      accuracy_decimals: 0
+      icon: "mdi:alert-circle"
+      entity_category: "diagnostic"
+    - id: tx_failed
+      name: "NMEA 2000 TX Failures"
+      accuracy_decimals: 0
+      icon: "mdi:alert-circle"
+      entity_category: "diagnostic"
+    - id: rx_missed
+      name: "NMEA 2000 RX Missed"
+      accuracy_decimals: 0
+      icon: "mdi:alert-circle"
+      entity_category: "diagnostic"
+      on_value:
+      - lvgl.label.update:
+          id: rx_missed_label
+          text: 
+            format: "%.0f"
+            args:
+              - 'id(rx_missed).state'
+    - id: rx_overrun
+      name: "NMEA 2000 RX Overrun"
+      accuracy_decimals: 0
+      entity_category: "diagnostic"
+      icon: "mdi:alert-circle"
+    - id: tx_timeouts
+      name: "NMEA 2000 TX Timeouts"
+      accuracy_decimals: 0
+      entity_category: "diagnostic"
+      icon: "mdi:alert-circle"
+    - id: sog
+      name: "Speed Over Ground"
+      accuracy_decimals: 1
+      icon: "mdi:speedometer"
+      on_value:
+      - lvgl.label.update:
+          id: sog_text
+          text: 
+            format: "%.1f Mh"
+            args:
+              - 'id(sog).state * 2.23694'
+      # m/s -> mph
+    - id: cog
+      name: "Course Over Ground"
+      accuracy_decimals: 1
+      icon: "mdi:navigation"
+      on_value:
+      - lvgl.label.update:
+          id: cog_text
+          text: 
+            format: "%.0f °T"
+            args:
+              - 'id(cog).state * 57.2958'
+      # radians >- degrees
+    - id: lat
+      name: "Latitude"
+      accuracy_decimals: 5
+      icon: "mdi:navigation"
+      on_value:
+      - lvgl.label.update:
+          id: lat_text
+          text: 
+            format: "%.5f"
+            args:
+              - 'id(lat).state'
+    - id: lon
+      name: "Longitude"
+      accuracy_decimals: 5
+      icon: "mdi:navigation"
+      on_value:
+      - lvgl.label.update:
+          id: lon_text
+          text: 
+            format: "\n%.5f"
+            args:
+              - 'id(lon).state'
+
+display:
+  - platform: rpi_dpi_rgb
+    id: my_display
+    rotation: 270
+    auto_clear_enabled: false
+    update_interval: never
+    color_order: RGB
+    pclk_frequency: 14MHz
+    dimensions:
+      width: 800
+      height: 480
+    de_pin:
+      number: 5
+    hsync_pin:
+      number: 46
+      ignore_strapping_warning: true
+    vsync_pin:
+      number: 3
+      ignore_strapping_warning: true
+    pclk_pin: 7
+    pclk_inverted: false
+    hsync_back_porch: 10 #30
+    hsync_front_porch: 20 #210 
+    hsync_pulse_width: 10 #30
+    vsync_back_porch: 10 #4
+    vsync_front_porch: 10 #4
+    vsync_pulse_width: 10 #4
+    data_pins:
+      red:
+        - 1         #r3
+        - 2         #r4
+        - 42        #r5
+        - 41        #r6
+        - 40        #r7
+      blue:
+        - 14        #b3
+        - 38        #b4
+        - 18        #b5
+        - 17        #b6
+        - 10        #b7
+      green:
+        - 39        #g2
+        - 0         #g3
+        - 45        #g4
+        - 48        #g5
+        - 47        #g6
+        - 21        #g7
+
+touchscreen:
+  platform: gt911
+  id: my_touchscreen
+  interrupt_pin: GPIO4
+  on_touch:
+    - lambda: |-
+          ESP_LOGI("cal", "x=%d, y=%d, x_raw=%d, y_raw=%0d",
+              touch.x,
+              touch.y,
+              touch.x_raw,
+              touch.y_raw
+              );
+
+#font:
+#  - file: "gfonts://Roboto"
+#    id: chu_nano
+#    size: 12
+
+#image:
+#  - file: https://esphome.io/_images/logo.png
+#    id: esphome_logo
+#    resize: 200x162
+
+lvgl:
+  default_font: montserrat_28
+  displays: 
+    - my_display
+  #buffer_size: 25% #allow default 100%
+  id: my_lvgl
+  
+  touchscreens:
+    - touchscreen_id: my_touchscreen
+
+  style_definitions:
+    - id: header_footer
+      bg_color: 0x2F8CD8
+      bg_grad_color: 0x005782
+      bg_grad_dir: VER
+      bg_opa: COVER
+      border_opa: TRANSP
+      radius: 0
+      pad_all: 0
+      pad_row: 0
+      pad_column: 0
+      border_color: 0x0077b3
+      text_color: 0xFFFFFF
+      width: 100%
+      height: 80
+
+  top_layer:
+    widgets:
+      - buttonmatrix:
+          align: bottom_mid
+          styles: header_footer
+          pad_all: 0
+          outline_width: 0
+          id: top_layer
+          items:
+            styles: header_footer
+          rows:
+            - buttons:
+              - id: page_prev
+                text: "\uF053"
+                on_press:
+                  then:
+                    lvgl.page.previous:
+              - id: page_home
+                text: "\uF015"
+                on_press:
+                  then:
+                    lvgl.page.show: main_page
+              - id: page_next
+                text: "\uF054"
+                on_press:
+                  then:
+                    lvgl.page.next:
+
+  pages:
+    - id: main_page
+      bg_color: 0x000000
+      widgets:
+      - obj:
+          align: TOP_MID
+          styles: header_footer
+          widgets:
+          - label:
+              text: "ESPHome NMEA2K Display"
+              align: CENTER
+              text_align: CENTER
+              text_color: 0xFFFFFF
+      - obj: # a properly placed coontainer object for all these controls
+          align: CENTER
+          width: 480
+          height: 740
+          pad_all: 6
+          border_color: 0xAAAAAA
+          text_color: 0xFFFFFF
+          bg_opa: TRANSP
+          border_width: 2
+          layout: # enable the GRID layout for the children widgets
+            type: GRID # split the rows and the columns proportionally
+            grid_columns: [FR(1), FR(1), FR(1)] # equal
+            grid_rows: [FR(10), FR(20), FR(10), FR(20), FR(10), FR(20), FR(10), FR(20)] # like percents
+          widgets:
+          - label:
+              text_font: montserrat_14
+              grid_cell_column_pos: 0 # place the widget in
+              grid_cell_row_pos: 0 # the corresponding cell
+              grid_cell_x_align: STRETCH
+              grid_cell_y_align: STRETCH
+              text: "SOG"
+          - label:
+              id: sog_text
+              grid_cell_column_pos: 0 # place the widget in
+              grid_cell_row_pos: 1 # the corresponding cell
+              grid_cell_x_align: CENTER
+              grid_cell_y_align: STRETCH
+              text: "- SOG -"
+          - label:
+              text_font: montserrat_14
+              grid_cell_column_pos: 1 # place the widget in
+              grid_cell_row_pos: 0 # the corresponding cell
+              grid_cell_x_align: STRETCH
+              grid_cell_y_align: STRETCH
+              text: "COG"
+          - label:
+              id: cog_text
+              grid_cell_column_pos: 1 # place the widget in
+              grid_cell_row_pos: 1 # the corresponding cell
+              grid_cell_x_align: CENTER
+              grid_cell_y_align: STRETCH
+              text: "- COG -"
+          - label:
+              text_font: montserrat_14
+              grid_cell_column_pos: 2 # place the widget in
+              grid_cell_row_pos: 0 # the corresponding cell
+              grid_cell_x_align: STRETCH
+              grid_cell_y_align: STRETCH
+              text: "Position"
+          - label:
+              id: lat_text
+              grid_cell_column_pos: 2 # place the widget in
+              grid_cell_row_pos: 1 # the corresponding cell
+              grid_cell_x_align: CENTER
+              grid_cell_y_align: STRETCH
+              text: "- POS -"
+          - label:
+              id: lon_text
+              grid_cell_column_pos: 2 # place the widget in
+              grid_cell_row_pos: 1 # the corresponding cell
+              grid_cell_x_align: CENTER
+              grid_cell_y_align: STRETCH
+              text: "- POS -"
+          - label:
+              text_font: montserrat_14
+              grid_cell_column_pos: 2 # place the widget in
+              grid_cell_row_pos: 6 # the corresponding cell
+              grid_cell_x_align: STRETCH
+              grid_cell_y_align: STRETCH
+              text: "N2k Missed"
+          - label:
+              id: rx_missed_label
+              grid_cell_column_pos: 2 # place the widget in
+              grid_cell_row_pos: 7 # the corresponding cell
+              grid_cell_x_align: CENTER
+              grid_cell_y_align: STRETCH
+              text: "- RX Missed -"
+#      - image:
+#          src: esphome_logo
+#          align: CENTER
+#          id: display_image
