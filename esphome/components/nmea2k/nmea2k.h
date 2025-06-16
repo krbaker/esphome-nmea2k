@@ -3,7 +3,7 @@
 #include "esphome/core/component.h"
 
 namespace esphome {
-namespace nmea2k {} {
+namespace nmea2k {
 
 
 class Nmea2kComponent : public Component {
