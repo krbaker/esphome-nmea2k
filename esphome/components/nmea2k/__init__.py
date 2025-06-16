@@ -2,6 +2,9 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ID,
+)
+
+from .const import (
     CONF_CAN_TX_PIN,
     CONF_CAN_RX_PIN,
     CONF_CAN_MSG_BUFFER_SIZE,
