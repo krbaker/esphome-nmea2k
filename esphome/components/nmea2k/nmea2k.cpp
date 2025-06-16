@@ -6,13 +6,13 @@
 
 
 namespace esphome {
-namespace nmea2k {} {
+namespace nmea2k {
 
-static const char *const TAG = "nmea2k";";
+static const char *const TAG = "nmea2k";
 
 void Nmea2kComponent::setup() {
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: starting...");
-  ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");");
+  ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
 
 void Nmea2kComponent::dump_config() {
