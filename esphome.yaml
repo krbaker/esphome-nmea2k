@@ -13,12 +13,11 @@ esphome:
     board_upload.maximum_ram_size: 524288
   libraries:
     - ttlappalainen/NMEA2000-library
-  includes: 
-    - "/config/esphome/nmea2k/GwTimer.h"
-    - "/config/esphome/nmea2k/nmea2k_sensor.h"
-    - "/config/esphome/nmea2k/Nmea2kTwai.cpp"
-    - "/config/esphome/nmea2k/Nmea2kTwai.h"
 
+external_components:
+  - source: github://krbaker/esphome-nmea2k@main
+    components: [ nmea2k ]
+    refresh: 600s
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -120,118 +119,118 @@ switch:
       mode:
         output: true
 
-sensor:
-- platform: custom
-  lambda: |-
-    auto my_component = new Nmea2kSensor();
-    App.register_component(my_component);
-    return { my_component->n2kstatus,
-    my_component->n2kaddress,
-    my_component->rx_error_counter,
-    my_component->tx_error_counter,
-    my_component->tx_failed,
-    my_component->rx_missed,
-    my_component->rx_overrun,
-    my_component->tx_timeouts,
-    my_component->sog,
-    my_component->cog,
-    my_component->lat,
-    my_component->lon };
+# sensor:
+# - platform: custom
+#   lambda: |-
+#     auto my_component = new Nmea2kSensor();
+#     App.register_component(my_component);
+#     return { my_component->n2kstatus,
+#     my_component->n2kaddress,
+#     my_component->rx_error_counter,
+#     my_component->tx_error_counter,
+#     my_component->tx_failed,
+#     my_component->rx_missed,
+#     my_component->rx_overrun,
+#     my_component->tx_timeouts,
+#     my_component->sog,
+#     my_component->cog,
+#     my_component->lat,
+#     my_component->lon };
 
-  sensors:
-    - id: n2kstatus
-      name: "NMEA 2000 Status"
-      accuracy_decimals: 0
-      icon: "mdi:gauge"
-      entity_category: "diagnostic"
-    - id: n2kaddress
-      name: "NMEA 2000 Address"
-      accuracy_decimals: 0
-      icon: "mdi:sign-real-estate"
-      entity_category: "diagnostic"
-    - id: rx_error_counter
-      name: "NMEA 2000 RX Errors"
-      accuracy_decimals: 0
-      icon: "mdi:alert-circle"
-      entity_category: "diagnostic"
-    - id: tx_error_counter
-      name: "NMEA 2000 TX Errors"
-      accuracy_decimals: 0
-      icon: "mdi:alert-circle"
-      entity_category: "diagnostic"
-    - id: tx_failed
-      name: "NMEA 2000 TX Failures"
-      accuracy_decimals: 0
-      icon: "mdi:alert-circle"
-      entity_category: "diagnostic"
-    - id: rx_missed
-      name: "NMEA 2000 RX Missed"
-      accuracy_decimals: 0
-      icon: "mdi:alert-circle"
-      entity_category: "diagnostic"
-      on_value:
-      - lvgl.label.update:
-          id: rx_missed_label
-          text: 
-            format: "%.0f"
-            args:
-              - 'id(rx_missed).state'
-    - id: rx_overrun
-      name: "NMEA 2000 RX Overrun"
-      accuracy_decimals: 0
-      entity_category: "diagnostic"
-      icon: "mdi:alert-circle"
-    - id: tx_timeouts
-      name: "NMEA 2000 TX Timeouts"
-      accuracy_decimals: 0
-      entity_category: "diagnostic"
-      icon: "mdi:alert-circle"
-    - id: sog
-      name: "Speed Over Ground"
-      accuracy_decimals: 1
-      icon: "mdi:speedometer"
-      on_value:
-      - lvgl.label.update:
-          id: sog_text
-          text: 
-            format: "%.1f Mh"
-            args:
-              - 'id(sog).state * 2.23694'
-      # m/s -> mph
-    - id: cog
-      name: "Course Over Ground"
-      accuracy_decimals: 1
-      icon: "mdi:navigation"
-      on_value:
-      - lvgl.label.update:
-          id: cog_text
-          text: 
-            format: "%.0f °T"
-            args:
-              - 'id(cog).state * 57.2958'
-      # radians >- degrees
-    - id: lat
-      name: "Latitude"
-      accuracy_decimals: 5
-      icon: "mdi:navigation"
-      on_value:
-      - lvgl.label.update:
-          id: lat_text
-          text: 
-            format: "%.5f"
-            args:
-              - 'id(lat).state'
-    - id: lon
-      name: "Longitude"
-      accuracy_decimals: 5
-      icon: "mdi:navigation"
-      on_value:
-      - lvgl.label.update:
-          id: lon_text
-          text: 
-            format: "\n%.5f"
-            args:
-              - 'id(lon).state'
+#   sensors:
+#     - id: n2kstatus
+#       name: "NMEA 2000 Status"
+#       accuracy_decimals: 0
+#       icon: "mdi:gauge"
+#       entity_category: "diagnostic"
+#     - id: n2kaddress
+#       name: "NMEA 2000 Address"
+#       accuracy_decimals: 0
+#       icon: "mdi:sign-real-estate"
+#       entity_category: "diagnostic"
+#     - id: rx_error_counter
+#       name: "NMEA 2000 RX Errors"
+#       accuracy_decimals: 0
+#       icon: "mdi:alert-circle"
+#       entity_category: "diagnostic"
+#     - id: tx_error_counter
+#       name: "NMEA 2000 TX Errors"
+#       accuracy_decimals: 0
+#       icon: "mdi:alert-circle"
+#       entity_category: "diagnostic"
+#     - id: tx_failed
+#       name: "NMEA 2000 TX Failures"
+#       accuracy_decimals: 0
+#       icon: "mdi:alert-circle"
+#       entity_category: "diagnostic"
+#     - id: rx_missed
+#       name: "NMEA 2000 RX Missed"
+#       accuracy_decimals: 0
+#       icon: "mdi:alert-circle"
+#       entity_category: "diagnostic"
+#       on_value:
+#       - lvgl.label.update:
+#           id: rx_missed_label
+#           text: 
+#             format: "%.0f"
+#             args:
+#               - 'id(rx_missed).state'
+#     - id: rx_overrun
+#       name: "NMEA 2000 RX Overrun"
+#       accuracy_decimals: 0
+#       entity_category: "diagnostic"
+#       icon: "mdi:alert-circle"
+#     - id: tx_timeouts
+#       name: "NMEA 2000 TX Timeouts"
+#       accuracy_decimals: 0
+#       entity_category: "diagnostic"
+#       icon: "mdi:alert-circle"
+#     - id: sog
+#       name: "Speed Over Ground"
+#       accuracy_decimals: 1
+#       icon: "mdi:speedometer"
+#       on_value:
+#       - lvgl.label.update:
+#           id: sog_text
+#           text: 
+#             format: "%.1f Mh"
+#             args:
+#               - 'id(sog).state * 2.23694'
+#       # m/s -> mph
+#     - id: cog
+#       name: "Course Over Ground"
+#       accuracy_decimals: 1
+#       icon: "mdi:navigation"
+#       on_value:
+#       - lvgl.label.update:
+#           id: cog_text
+#           text: 
+#             format: "%.0f °T"
+#             args:
+#               - 'id(cog).state * 57.2958'
+#       # radians >- degrees
+#     - id: lat
+#       name: "Latitude"
+#       accuracy_decimals: 5
+#       icon: "mdi:navigation"
+#       on_value:
+#       - lvgl.label.update:
+#           id: lat_text
+#           text: 
+#             format: "%.5f"
+#             args:
+#               - 'id(lat).state'
+#     - id: lon
+#       name: "Longitude"
+#       accuracy_decimals: 5
+#       icon: "mdi:navigation"
+#       on_value:
+#       - lvgl.label.update:
+#           id: lon_text
+#           text: 
+#             format: "\n%.5f"
+#             args:
+#               - 'id(lon).state'
 
 display:
   - platform: rpi_dpi_rgb
