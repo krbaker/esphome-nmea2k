@@ -24,7 +24,7 @@ from .const import (
     CONF_ESPHOME_UPDATE_PERIOD,
     CONF_NMEA2K_DEVICE_FUNCTION,
     CONF_NMEA2K_DEVICE_CLASS,
-    CONF_NMEA2K_DEVICE_ID,
+    CONF_NMEA2K_MANUFACTURER_ID,
 )
 
 MULTI_CONF = True
@@ -45,13 +45,13 @@ CONFIG_SCHEMA = (
             cv.Required(CONF_CAN_RX_PIN): pins.gpio_output_pin_schema,
             cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.int_,
-            cv.Required(CONF_NMEA2K_DEVICE_ID): cv.int_,
+            cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.int_,
             cv.Required(CONF_NMEA2K_PRODUCT_NAME): cv.string,
             cv.Required(CONF_NMEA2K_PRODUCT_LOAD): cv.int_,
+            cv.Required(CONF_NMEA2K_PRODUCT_SERIAL): cv.int_,
             cv.Optional(CONF_CAN_MSG_BUFFER_SIZE, default=32): cv.int_,
             cv.Optional(CONF_CAN_RX_BUFFER_SIZE, default=10): cv.int_,
             cv.Optional(CONF_CAN_TX_BUFFER_SIZE, default=10): cv.int_,
-            cv.Optional(CONF_NMEA2K_PRODUCT_SERIAL, default=1): cv.int_,
             cv.Optional(CONF_NMEA2K_PRODUCT_CODE, default=100): cv.int_,
             cv.Optional(CONF_NMEA2K_FIRMWARE_TYPE, default="Alpha"): cv.string,
             cv.Optional(CONF_NMEA2K_FIRMWARE_VERSION, default="0.0.0"): cv.string,
