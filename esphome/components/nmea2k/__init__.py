@@ -65,9 +65,12 @@ CONFIG_SCHEMA = (
 )
 
 async def to_code(config):
+    can_tx_pin = await cg.gpio_pin_expression(config[CONF_CAN_TX_PIN])
+    can_rx_pin = await cg.gpio_pin_expression(config[CONF_CAN_RX_PIN])
+
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
     # Configure the component
-    cg.add(var.set_can_tx_pin(config[CONF_CAN_TX_PIN]))
-    cg.add(var.set_can_rx_pin(config[CONF_CAN_RX_PIN]))
+    cg.add(var.set_can_tx_pin(can_tx_pin))
+    cg.add(var.set_can_rx_pin(can_rx_pin))
