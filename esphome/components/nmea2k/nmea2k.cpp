@@ -22,19 +22,11 @@ void Nmea2kComponent::dump_config() {
 float Nmea2kComponent::get_setup_priority() const { return setup_priority::DATA; }
 
 void set_can_tx_pin(InternalGPIOPin *tx_pin) {
-  if (tx_pin.is_null()) {
-    ESP_LOGE(TAG, "Nmea2k: CAN TX pin is null");
-    return;
-  }
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN TX pin to %s", tx_pin.get_name().c_str());
   this->CAN_TX_PIN_ = tx_pin;
 }
 
 void set_can_rx_pin(InternalGPIOPin *rx_pin) {
-  if (rx_pin.is_null()) {
-    ESP_LOGE(TAG, "Nmea2k: CAN RX pin is null");
-    return;
-  }
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN RX pin to %s", rx_pin.get_name().c_str());
   this->CAN_RX_PIN_ = rx_pin;
 }
