@@ -50,12 +50,12 @@ void Nmea2kComponent::setup() {
     // Set product information
     n2k->SetProductInformation(this->nmea2k_product_serial_,    // Manufacturer's Model serial code
                                 this->nmea2k_product_code_,     // Manufacturer's product code
-                                this->nmea2k_firmware_version,  // Manufacturer's Model ID
-                                 this->nmea2k_firmware_type,    // Manufacturer's Software version code
-                                 this->nmea2k_version_,         // Manufacturer's Model version,
-                                 this->nmea2k_product_load_,    // Load Equivalency Number (LEN) of the product
-                                 this->nmea2k_version_,         // Version
-                                 this->nmea2k_certification_,   // Certification level
+                                this->nmea2k_firmware_version_,  // Manufacturer's Model ID
+                                this->nmea2k_firmware_type_,    // Manufacturer's Software version code
+                                this->nmea2k_version_,         // Manufacturer's Model version,
+                                this->nmea2k_product_load_,    // Load Equivalency Number (LEN) of the product
+                                this->nmea2k_version_,         // Version
+                                this->nmea2k_certification_,   // Certification level
                                 );
     // Set device information
     n2k->SetDeviceInformation(this->nmea2k_device_id_, // Unique number. Use e.g. Serial number. Id is generated from MAC-Address
