@@ -3,6 +3,15 @@
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
 
+#include "Nmea2kTwai.h"
+#include "N2kTypes.h"
+#include "N2kMessages.h"
+
+#ifdef ARDUINO_ARCH_ESP32
+#include <driver/pcnt.h>
+#endif
+
+
 namespace esphome {
 namespace nmea2k {
 
@@ -12,6 +21,7 @@ class Nmea2kComponent : public Component {
     Nmea2kComponent() = default;
     void setup() override;
     void dump_config() override;
+    void set_id_from_mac();
     float get_setup_priority() const override;
     void set_can_tx_pin(GPIOPin *tx_pin);
     void set_can_rx_pin(GPIOPin *rx_pin);
@@ -20,6 +30,7 @@ class Nmea2kComponent : public Component {
     void set_can_msg_buffer_size(int size);
     void set_can_rx_buffer_size(int size);
     void set_can_tx_buffer_size(int size);
+    void set_nmea2k_device_id(uint32_t id);
     void set_nmea2k_device_class(int device_class);
     void set_nmea2k_manufacturer_id(int id);
     void set_nmea2k_product_load(int load);
@@ -40,6 +51,7 @@ class Nmea2kComponent : public Component {
     int can_msg_buffer_size_ = 0;
     int can_rx_buffer_size_ = 0;
     int can_tx_buffer_size_ = 0;
+    uint32_t nmea2k_device_id_ = 0;
     int nmea2k_device_function_ = 0;
     int nmea2k_device_class_ = 0;
     int nmea2k_manufacturer_id_ = 0;
@@ -53,6 +65,8 @@ class Nmea2kComponent : public Component {
     std::string nmea2k_firmware_type_ = "";
     std::string nmea2k_firmware_version_ = "";
     int esphome_update_period_ = 0;
+    Nmea2kTwai *n2k;
+    int NodeAddress = 32;
 };
 
 }  // namespace nmea2k

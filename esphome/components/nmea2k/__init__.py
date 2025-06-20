@@ -25,6 +25,7 @@ from .const import (
     CONF_NMEA2K_DEVICE_FUNCTION,
     CONF_NMEA2K_DEVICE_CLASS,
     CONF_NMEA2K_MANUFACTURER_ID,
+    CONF_NMEA2K_DEVICE_ID
 )
 
 MULTI_CONF = True
@@ -43,6 +44,7 @@ CONFIG_SCHEMA = (
             cv.GenerateID(): cv.declare_id(Nmea2kComponent),
             cv.Required(CONF_CAN_TX_PIN): pins.gpio_output_pin_schema,
             cv.Required(CONF_CAN_RX_PIN): pins.gpio_input_pin_schema,
+            cv.Optional(CONF_NMEA2K_DEVICE_ID): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.int_,
             cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.int_,
@@ -91,3 +93,4 @@ async def to_code(config):
     cg.add(var.set_nmea2k_heartbeat_period(config[CONF_NMEA2K_HEARTBEAT_PERIOD]))
     cg.add(var.set_can_recovery_period(config[CONF_CAN_RECOVERY_PERIOD]))
     cg.add(var.set_esphome_update_period(config[CONF_ESPHOME_UPDATE_PERIOD]))
+    cg.add(var.set_nmea2k_device_id(config[CONF_NMEA2K_DEVICE_ID]))
