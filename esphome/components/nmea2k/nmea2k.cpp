@@ -34,7 +34,7 @@ void Nmea2kComponent::setup() {
       // Setup NMEA Here
 
     // if user doesn't specify device id, use MAC address
-    if this->nmea2k_device_id_ == 0) {
+    if (this->nmea2k_device_id_ == 0) {
       set_id_from_mac();
     }
 
