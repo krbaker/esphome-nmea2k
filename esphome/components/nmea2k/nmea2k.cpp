@@ -50,10 +50,7 @@ void Nmea2kComponent::set_can_rx_buffer_size(int size){
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN RX buffer size to %d", size);
   this->can_rx_buffer_size_ = size;
 }
-void Nmea2kComponent::set_can_tx_buffer_size(int size){
-  ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN TX buffer size to %d", size);
-  this->can_tx_buffer_size_ = size;
-}
+
 void Nmea2kComponent::set_can_tx_buffer_size(int size){
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN TX buffer size to %d", size);
   this->can_tx_buffer_size_ = size;

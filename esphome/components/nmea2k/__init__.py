@@ -88,6 +88,6 @@ async def to_code(config):
     cg.add(var.set_nmea2k_firmware_version(config[CONF_NMEA2K_FIRMWARE_VERSION]))
     cg.add(var.set_nmea2k_certification(config[CONF_NMEA2K_CERTIFICATION]))
     cg.add(var.set_nmea2k_version(config[CONF_NMEA2K_VERSION]))
-    cg.add(var.set_nmea2k_heatbeat_period(config[CONF_NMEA2K_HEARTBEAT_PERIOD]))
+    cg.add(var.set_nmea2k_heartbeat_period(config[CONF_NMEA2K_HEARTBEAT_PERIOD]))
     cg.add(var.set_can_recovery_period(config[CONF_CAN_RECOVERY_PERIOD]))
     cg.add(var.set_esphome_update_period(config[CONF_ESPHOME_UPDATE_PERIOD]))
