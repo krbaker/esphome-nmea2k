@@ -20,7 +20,7 @@ class Nmea2kComponent : public Component {
     void set_can_msg_buffer_size(int size);
     void set_can_rx_buffer_size(int size);
     void set_can_tx_buffer_size(int size);
-    void set_nmea2k_device_class(int class);
+    void set_nmea2k_device_class(int device_class);
     void set_nmea2k_manufacturer_id(int id);
     void set_nmea2k_product_load(int load);
     void set_nmea2k_product_serial(int serial);

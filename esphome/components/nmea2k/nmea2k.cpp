@@ -33,7 +33,7 @@ void Nmea2kComponent::set_can_rx_pin(GPIOPin *rx_pin) {
 
 void Nmea2kComponent::set_nmea2k_device_function(int function) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting device function to %d", function);
-  this.nmea2k_device_function = function;
+  this->nmea2k_device_function_ = function;
 }
 
 void Nmea2kComponent::set_can_recovery_period(int period){
@@ -59,9 +59,9 @@ void Nmea2kComponent::set_can_tx_buffer_size(int size){
   this->can_tx_buffer_size_ = size;
 }
 
-void Nmea2kComponent::set_nmea2k_device_class(int class){
+void Nmea2kComponent::set_nmea2k_device_class(int device_class){
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting device class to %d", class);
-  this->nmea2k_device_class_ = class;
+  this->nmea2k_device_class_ = device_class;
 }
 
 void Nmea2kComponent::set_nmea2k_manufacturer_id(int id){
