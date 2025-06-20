@@ -44,13 +44,13 @@ CONFIG_SCHEMA = (
             cv.GenerateID(): cv.declare_id(Nmea2kComponent),
             cv.Required(CONF_CAN_TX_PIN): pins.gpio_output_pin_schema,
             cv.Required(CONF_CAN_RX_PIN): pins.gpio_input_pin_schema,
-            cv.Optional(CONF_NMEA2K_DEVICE_ID): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.int_,
             cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.int_,
             cv.Required(CONF_NMEA2K_PRODUCT_NAME): cv.string,
             cv.Required(CONF_NMEA2K_PRODUCT_LOAD): cv.int_,
             cv.Required(CONF_NMEA2K_PRODUCT_SERIAL): cv.int_,
+            cv.Optional(CONF_NMEA2K_DEVICE_ID): cv.int_,
             cv.Optional(CONF_CAN_MSG_BUFFER_SIZE, default=32): cv.int_,
             cv.Optional(CONF_CAN_RX_BUFFER_SIZE, default=10): cv.int_,
             cv.Optional(CONF_CAN_TX_BUFFER_SIZE, default=10): cv.int_,
@@ -93,4 +93,5 @@ async def to_code(config):
     cg.add(var.set_nmea2k_heartbeat_period(config[CONF_NMEA2K_HEARTBEAT_PERIOD]))
     cg.add(var.set_can_recovery_period(config[CONF_CAN_RECOVERY_PERIOD]))
     cg.add(var.set_esphome_update_period(config[CONF_ESPHOME_UPDATE_PERIOD]))
-    cg.add(var.set_nmea2k_device_id(config[CONF_NMEA2K_DEVICE_ID]))
+    if CONF_NMEA2K_DEVICE_ID in config:
+        cg.add(var.set_nmea2k_device_id(config[CONF_NMEA2K_DEVICE_ID]))
