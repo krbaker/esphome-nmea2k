@@ -48,7 +48,7 @@ class Nmea2kComponent : public Component {
  protected:
     GPIOPin *can_rx_pin_;
     GPIOPin *can_tx_pin_;
-    int can_recovery_period_ = 0;
+    unsigned long can_recovery_period_ = 0;
     int can_msg_buffer_size_ = 0;
     int can_rx_buffer_size_ = 0;
     int can_tx_buffer_size_ = 0;
