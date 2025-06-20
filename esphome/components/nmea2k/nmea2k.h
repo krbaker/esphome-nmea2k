@@ -20,6 +20,7 @@ class Nmea2kComponent : public Component {
   public:
     Nmea2kComponent() = default;
     void setup() override;
+    void loop() override;
     void dump_config() override;
     void set_id_from_mac();
     float get_setup_priority() const override;
