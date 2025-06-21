@@ -9,8 +9,6 @@
 #include "N2kMessages.h"
 #include "NMEA2000.h"
 
-#include <driver/pcnt.h>
-
 
 namespace esphome {
 namespace nmea2k {
