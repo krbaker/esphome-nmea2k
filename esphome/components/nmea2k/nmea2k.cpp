@@ -42,8 +42,8 @@ void Nmea2kComponent::setup() {
     }
 
     n2k = new Nmea2kTwai(
-      this->can_tx_pin_->get_gpio_num(),  // Get the GPIO number for the TX pin
-      this->can_rx_pin_->get_gpio_num(),  // Get the GPIO number for the RX pin
+      this->can_tx_pin_->get_pin(),  // Get the GPIO number for the TX pin
+      this->can_rx_pin_->get_pin(),  // Get the GPIO number for the RX pin
       this->can_recovery_period_);
 
     n2k->SetN2kCANMsgBufSize(this->can_msg_buffer_size_); // Set the size of the CAN message buffer
