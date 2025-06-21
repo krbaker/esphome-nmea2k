@@ -73,3 +73,5 @@ class Nmea2kComponent : public Component {
 
 }  // namespace nmea2k
 }  // namespace esphome
+
+#endif
