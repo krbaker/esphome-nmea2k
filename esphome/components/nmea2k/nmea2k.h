@@ -4,12 +4,12 @@
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
 
+#include "Nmea2kTwai.h"
 #include "N2kTypes.h"
 #include "N2kMessages.h"
+#include "NMEA2000.h"
 
-#ifdef ARDUINO_ARCH_ESP32
 #include <driver/pcnt.h>
-#endif
 
 
 namespace esphome {
