@@ -32,14 +32,14 @@ class GwIntervalRunner{
     std::vector<Run> runners;
     unsigned long startTime=0;
     public:
-    GwIntervalRunner(unsigned long now=esphome::millis()){
+    GwIntervalRunner(unsigned long now=millis()){
         startTime=now;
     }
     void addAction(unsigned long interval,RunFunction run,unsigned long start=0){
         if (start==0) start=startTime;
         runners.push_back(Run(run,interval,start));
     }
-    bool loop(unsigned long now=esphome::millis()){
+    bool loop(unsigned long now=millis()){
         bool rt=false;
         for (auto it=runners.begin();it!=runners.end();it++){
             if (it->runIf(now)) rt=true;
