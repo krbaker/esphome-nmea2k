@@ -51,10 +51,10 @@ void Nmea2kComponent::setup() {
     n2k->SetN2kCANSendFrameBufSize(this->can_tx_buffer_size_); // These appear to have no effect with twai
 
     // Set product information
-    n2k->SetProductInformation(this->nmea2k_product_serial_,    // Manufacturer's Model serial code
+    n2k->SetProductInformation(this->nmea2k_product_name_.c_str(),    // Manufacturer's Model serial code
                                 this->nmea2k_product_code_,     // Manufacturer's product code
-                                this->nmea2k_firmware_version_,  // Manufacturer's Model ID
-                                this->nmea2k_firmware_type_,    // Manufacturer's Software version code
+                                this->nmea2k_firmware_version_.c_str(),  // Manufacturer's Model ID
+                                this->nmea2k_firmware_type_.c_str(),    // Manufacturer's Software version code
                                 this->nmea2k_version_,         // Manufacturer's Model version,
                                 this->nmea2k_product_load_,    // Load Equivalency Number (LEN) of the product
                                 this->nmea2k_version_,         // Version
