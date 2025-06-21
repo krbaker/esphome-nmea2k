@@ -3,10 +3,10 @@
 #include "NMEA2000.h"
 #include "GwTimer.h"
 
-#ifdef USE_ESP32
+//#ifdef USE_ESP32
 #include "esphome/core/hal.h"
 #include <driver/gpio.h>
-#endif
+//#endif
 
 class Nmea2kTwai : public tNMEA2000{
     public:
