@@ -24,8 +24,8 @@ class Nmea2kComponent : public Component {
     void dump_config() override;
     void set_id_from_mac();
     float get_setup_priority() const override;
-    void set_can_tx_pin(GPIOPin *tx_pin);
-    void set_can_rx_pin(GPIOPin *rx_pin);
+    void set_can_tx_pin(InternalGPIOPin *tx_pin);
+    void set_can_rx_pin(InternalGPIOPin *rx_pin);
     void set_nmea2k_device_function(int function);
     void set_can_recovery_period(int period);
     void set_can_msg_buffer_size(int size);
@@ -46,8 +46,8 @@ class Nmea2kComponent : public Component {
     void set_esphome_update_period(int period);
     
  protected:
-    GPIOPin *can_rx_pin_;
-    GPIOPin *can_tx_pin_;
+    InternalGPIOPin *can_rx_pin_;
+    InternalGPIOPin *can_tx_pin_;
     unsigned long can_recovery_period_ = 0;
     int can_msg_buffer_size_ = 0;
     int can_rx_buffer_size_ = 0;

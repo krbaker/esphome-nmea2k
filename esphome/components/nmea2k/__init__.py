@@ -42,8 +42,8 @@ CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(Nmea2kComponent),
-            cv.Required(CONF_CAN_TX_PIN): pins.gpio_output_pin_schema,
-            cv.Required(CONF_CAN_RX_PIN): pins.gpio_input_pin_schema,
+            cv.Required(CONF_CAN_TX_PIN): pins.internal_gpio_output_pin_schema,
+            cv.Required(CONF_CAN_RX_PIN): pins.internal_gpio_input_pin_schema,
             cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.int_,
             cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.int_,
             cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.int_,
@@ -67,8 +67,8 @@ CONFIG_SCHEMA = (
 )
 
 async def to_code(config):
-    can_tx_pin = await cg.gpio_pin_expression(config[CONF_CAN_TX_PIN])
-    can_rx_pin = await cg.gpio_pin_expression(config[CONF_CAN_RX_PIN])
+    can_tx_pin = await cg.internal_gpio_pin_expression(config[CONF_CAN_TX_PIN])
+    can_rx_pin = await cg.internal_gpio_pin_expression(config[CONF_CAN_RX_PIN])
 
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)

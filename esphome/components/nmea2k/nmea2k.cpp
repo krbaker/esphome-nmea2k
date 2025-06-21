@@ -85,12 +85,12 @@ void Nmea2kComponent::dump_config() {
 
 float Nmea2kComponent::get_setup_priority() const { return setup_priority::DATA; }
 
-void Nmea2kComponent::set_can_tx_pin(GPIOPin *tx_pin) {
+void Nmea2kComponent::set_can_tx_pin(InternalGPIOPin *tx_pin) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN TX pin to %s", tx_pin.get_name().c_str());
   this->can_tx_pin_ = tx_pin;
 }
 
-void Nmea2kComponent::set_can_rx_pin(GPIOPin *rx_pin) {
+void Nmea2kComponent::set_can_rx_pin(InternalGPIOPin *rx_pin) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Setting CAN RX pin to %s", rx_pin.get_name().c_str());
   this->can_rx_pin_ = rx_pin;
 }
