@@ -7,7 +7,7 @@
 #include "Nmea2kTwai.h"
 
 //Used for getting mac address
-include "esp_mac.h"
+#include "esp_mac.h"
 namespace esphome {
 namespace nmea2k {
 
