@@ -8,7 +8,7 @@
 #include <driver/gpio.h>
 #endif
 
-class Nmea2kTwai : public tNMEA2000{
+class Nmea2kTwai : public xNMEA2000{
     public:
         Nmea2kTwai(gpio_num_t _TxPin,  gpio_num_t _RxPin, unsigned long recP=0, unsigned long logPeriod=0);
         typedef enum{
