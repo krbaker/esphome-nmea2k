@@ -4,7 +4,6 @@
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
 
-#include "Nmea2kTwai.h"
 #include "N2kTypes.h"
 #include "N2kMessages.h"
 
