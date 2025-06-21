@@ -70,6 +70,7 @@ async def to_code(config):
     cg.add_library(
         name="NMEA2000",
         repository="ttlappalainen/NMEA2000-library@v4.21.5",
+        version=None
     )
     can_tx_pin = await cg.gpio_pin_expression(config[CONF_CAN_TX_PIN])
     can_rx_pin = await cg.gpio_pin_expression(config[CONF_CAN_RX_PIN])
