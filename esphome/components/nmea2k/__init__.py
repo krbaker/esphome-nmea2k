@@ -69,8 +69,8 @@ CONFIG_SCHEMA = (
 async def to_code(config):
     cg.add_library(
         name="NMEA2000",
-        repository="https://github.com/ttlappalainen/NMEA2000.git@Production",
-        version=None,
+        repository="https://github.com/ttlappalainen/NMEA2000.git",
+        version="4.21.5",
     )
     can_tx_pin = await cg.gpio_pin_expression(config[CONF_CAN_TX_PIN])
     can_rx_pin = await cg.gpio_pin_expression(config[CONF_CAN_RX_PIN])
