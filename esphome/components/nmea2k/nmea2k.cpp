@@ -1,12 +1,5 @@
-#include <string>
 
 #include "nmea2k.h"
-#include "esphome/core/log.h"
-#include "esphome/core/application.h"
-#include "esphome/core/datatypes.h"
-#include "esphome/core/helpers.h"
-
-#include "Nmea2kTwai.h"
 
 //Used for getting mac address
 #include "esp_mac.h"

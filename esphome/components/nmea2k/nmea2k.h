@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _NMEA2K_H
+#define _NMEA2K_H
 
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
