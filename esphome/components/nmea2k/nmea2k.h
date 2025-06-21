@@ -5,11 +5,14 @@
 #include "esphome/core/hal.h"
 #include "esphome/core/log.h"
 
+#include "esphome/core/application.h"
+#include "esphome/components/sensor/sensor.h"
+
 #include "Nmea2kTwai.h"
 #include "N2kTypes.h"
 #include "N2kMessages.h"
 #include "NMEA2000.h"
-
+#include "N2kDeviceList.h"
 
 namespace esphome {
 namespace nmea2k {
@@ -45,6 +48,7 @@ class Nmea2kComponent : public Component {
     void set_esphome_update_period(int period);
     
  protected:
+    void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice);
     InternalGPIOPin *can_rx_pin_;
     InternalGPIOPin *can_tx_pin_;
     unsigned long can_recovery_period_ = 0;
@@ -67,6 +71,7 @@ class Nmea2kComponent : public Component {
     int esphome_update_period_ = 0;
     Nmea2kTwai *n2k;
     int NodeAddress = 32;
+    tN2kDeviceList *nmea2k_device_list;
 };
 
 }  // namespace nmea2k

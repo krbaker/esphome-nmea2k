@@ -25,6 +25,12 @@ void Nmea2kComponent::loop() {
         NodeAddress = SourceAddress;      // Set new Node Address (to save only once)
         ESP_LOGD("custom", "Node Address Changed to %i", NodeAddress);
     }
+    // Log new devices
+    if (this->nmea2k_device_list->ReadResetIsListUpdated()) {
+        for (uint8_t i = 0; i < N2kMaxBusDevices; i++){
+          print_device(nmea2k_device_list->FindDeviceBySource(i));
+        }
+    }
 }
 
 void Nmea2kComponent::setup() {
@@ -65,8 +71,27 @@ void Nmea2kComponent::setup() {
     n2k->SetMode(tNMEA2000::N2km_ListenAndNode, NodeAddress);
     n2k->SetForwardOwnMessages(false);
     n2k->SetHeartbeatIntervalAndOffset(this->nmea2k_heartbeat_period_); // Set the heartbeat period in milliseconds
+    nmea2k_device_list = new tN2kDeviceList(&n2k);
     n2k->Open();
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
+}
+
+void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
+  if ( pDevice == 0 ) return;
+
+  Serial.println("----------------------------------------------------------------------");
+  Serial.println(pDevice->GetModelID());
+  Serial.print("  Source: "); Serial.println(pDevice->GetSource());
+  Serial.print("  Manufacturer code:        "); Serial.println(pDevice->GetManufacturerCode());
+  Serial.print("  Unique number:            "); Serial.println(pDevice->GetUniqueNumber());
+  Serial.print("  Software version:         "); Serial.println(pDevice->GetSwCode());
+  Serial.print("  Model version:            "); Serial.println(pDevice->GetModelVersion());
+  Serial.print("  Manufacturer Information: "); PrintText(pDevice->GetManufacturerInformation());
+  Serial.print("  Installation description1: "); PrintText(pDevice->GetInstallationDescription1());
+  Serial.print("  Installation description2: "); PrintText(pDevice->GetInstallationDescription2());
+  PrintUlongList("  Transmit PGNs :",pDevice->GetTransmitPGNs());
+  PrintUlongList("  Receive PGNs  :",pDevice->GetReceivePGNs());
+  Serial.println();
 }
 
 void Nmea2kComponent::set_nmea2k_device_id(uint32_t id) {
