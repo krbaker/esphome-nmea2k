@@ -111,3 +111,13 @@ async def to_code(config):
     cg.add(var.set_esphome_update_period(config[CONF_ESPHOME_UPDATE_PERIOD]))
     if CONF_NMEA2K_DEVICE_ID in config:
         cg.add(var.set_nmea2k_device_id(config[CONF_NMEA2K_DEVICE_ID]))
+
+    active_pgns = set()
+    if CONF_DEVICES in config:
+        for device in config[CONF_DEVICES]:
+            name = device[CONF_NAME]
+            pgns = device[CONF_PGNS]
+            cg.add(var.register_device(name, pgns))
+            active_pgns.update(pgns)
+    for pgn in active_pgns:
+        cg.add_build_flag(f"-DNMEA2K_PGN_{pgn.upper()}")

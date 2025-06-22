@@ -72,6 +72,9 @@ class Nmea2kComponent : public Component {
     Nmea2kTwai *n2k;
     int NodeAddress = 32;
     tN2kDeviceList *nmea2k_device_list;
+#ifdef NMEA2K_PGN_POSITIONRAPID
+#error "Not yet implemented"
+#endif
 };
 
 }  // namespace nmea2k
