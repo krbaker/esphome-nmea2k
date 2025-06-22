@@ -25,7 +25,11 @@ from .const import (
     CONF_NMEA2K_DEVICE_FUNCTION,
     CONF_NMEA2K_DEVICE_CLASS,
     CONF_NMEA2K_MANUFACTURER_ID,
-    CONF_NMEA2K_DEVICE_ID
+    CONF_NMEA2K_DEVICE_ID,
+    CONF_DEVICES,
+    CONF_DEVICE_ID,
+    CONF_NAME,
+    CONF_PGNS
 )
 
 MULTI_CONF = True
@@ -40,7 +44,7 @@ Nmea2kComponent = nmea2k_ns.class_(
 
 DEVICE_SCHEMA = cv.Schema({
     cv.Required(CONF_NAME): cv.string,
-    cv.Required(CONF_NMEA2K_DEVICE_ID): cv.positive_int_,
+    cv.Required(CONF_DEVICE_ID): cv.positive_int_,
     cv.Required(CONF_PGNS): cv.ensure_list(cv.positive_int_),
 })
 
@@ -67,7 +71,8 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_NMEA2K_VERSION, default=0xffff): cv.positive_int_,
             cv.Optional(CONF_NMEA2K_HEARTBEAT_PERIOD, default=5000): cv.positive_int_,
             cv.Optional(CONF_CAN_RECOVERY_PERIOD, default=3000): cv.positive_int_,
-            cv.Optional(CONF_ESPHOME_UPDATE_PERIOD, default=500): cv.positive_int_
+            cv.Optional(CONF_ESPHOME_UPDATE_PERIOD, default=500): cv.positive_int_,
+            cv.Optional(CONF_DEVICES): cv.ensure_list(DEVICE_SCHEMA)
         }
     )
 )
