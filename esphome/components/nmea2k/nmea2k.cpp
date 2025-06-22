@@ -71,7 +71,7 @@ void Nmea2kComponent::setup() {
     n2k->SetMode(tNMEA2000::N2km_ListenAndNode, NodeAddress);
     n2k->SetForwardOwnMessages(false);
     n2k->SetHeartbeatIntervalAndOffset(this->nmea2k_heartbeat_period_); // Set the heartbeat period in milliseconds
-    nmea2k_device_list = new tN2kDeviceList(&n2k);
+    nmea2k_device_list = new tN2kDeviceList(n2k);
     n2k->Open();
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
