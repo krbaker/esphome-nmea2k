@@ -45,7 +45,7 @@ Nmea2kComponent = nmea2k_ns.class_(
 DEVICE_SCHEMA = cv.Schema({
     cv.Required(CONF_NAME): cv.string,
     cv.Required(CONF_DEVICE_ID): cv.positive_int,
-    cv.Required(CONF_PGNS): cv.ensure_list(cv.positive_int),
+    cv.Required(CONF_PGNS): cv.ensure_list(cv.string),
 })
 
 CONFIG_SCHEMA = (
