@@ -38,30 +38,36 @@ Nmea2kComponent = nmea2k_ns.class_(
     "Nmea2kComponent", cg.Component 
 )
 
+DEVICE_SCHEMA = cv.Schema({
+    cv.Required(CONF_NAME): cv.string,
+    cv.Required(CONF_NMEA2K_DEVICE_ID): cv.positive_int_,
+    cv.Required(CONF_PGNS): cv.ensure_list(cv.positive_int_),
+})
+
 CONFIG_SCHEMA = (
     cv.Schema(
         {
             cv.GenerateID(): cv.declare_id(Nmea2kComponent),
             cv.Required(CONF_CAN_TX_PIN): pins.internal_gpio_output_pin_schema,
             cv.Required(CONF_CAN_RX_PIN): pins.internal_gpio_input_pin_schema,
-            cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.int_,
-            cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.int_,
-            cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.int_,
+            cv.Required(CONF_NMEA2K_DEVICE_FUNCTION): cv.positive_int_,
+            cv.Required(CONF_NMEA2K_DEVICE_CLASS): cv.positive_int_,
+            cv.Required(CONF_NMEA2K_MANUFACTURER_ID): cv.positive_int_,
             cv.Required(CONF_NMEA2K_PRODUCT_NAME): cv.string,
-            cv.Required(CONF_NMEA2K_PRODUCT_LOAD): cv.int_,
-            cv.Required(CONF_NMEA2K_PRODUCT_SERIAL): cv.int_,
-            cv.Optional(CONF_NMEA2K_DEVICE_ID): cv.int_,
-            cv.Optional(CONF_CAN_MSG_BUFFER_SIZE, default=32): cv.int_,
-            cv.Optional(CONF_CAN_RX_BUFFER_SIZE, default=10): cv.int_,
-            cv.Optional(CONF_CAN_TX_BUFFER_SIZE, default=10): cv.int_,
-            cv.Optional(CONF_NMEA2K_PRODUCT_CODE, default=100): cv.int_,
+            cv.Required(CONF_NMEA2K_PRODUCT_LOAD): cv.positive_int_,
+            cv.Required(CONF_NMEA2K_PRODUCT_SERIAL): cv.positive_int_,
+            cv.Optional(CONF_NMEA2K_DEVICE_ID): cv.positive_int_,
+            cv.Optional(CONF_CAN_MSG_BUFFER_SIZE, default=32): cv.positive_int_,
+            cv.Optional(CONF_CAN_RX_BUFFER_SIZE, default=10): cv.positive_int_,
+            cv.Optional(CONF_CAN_TX_BUFFER_SIZE, default=10): cv.positive_int_,
+            cv.Optional(CONF_NMEA2K_PRODUCT_CODE, default=100): cv.postive_int_,
             cv.Optional(CONF_NMEA2K_FIRMWARE_TYPE, default="Alpha"): cv.string,
             cv.Optional(CONF_NMEA2K_FIRMWARE_VERSION, default="0.0.0"): cv.string,
-            cv.Optional(CONF_NMEA2K_CERTIFICATION, default=0xff): cv.int_,
-            cv.Optional(CONF_NMEA2K_VERSION, default=0xffff): cv.int_,
-            cv.Optional(CONF_NMEA2K_HEARTBEAT_PERIOD, default=5000): cv.int_,
-            cv.Optional(CONF_CAN_RECOVERY_PERIOD, default=3000): cv.int_,
-            cv.Optional(CONF_ESPHOME_UPDATE_PERIOD, default=500): cv.int_
+            cv.Optional(CONF_NMEA2K_CERTIFICATION, default=0xff): cv.positive_int_,
+            cv.Optional(CONF_NMEA2K_VERSION, default=0xffff): cv.positive_int_,
+            cv.Optional(CONF_NMEA2K_HEARTBEAT_PERIOD, default=5000): cv.positive_int_,
+            cv.Optional(CONF_CAN_RECOVERY_PERIOD, default=3000): cv.positive_int_,
+            cv.Optional(CONF_ESPHOME_UPDATE_PERIOD, default=500): cv.positive_int_
         }
     )
 )
