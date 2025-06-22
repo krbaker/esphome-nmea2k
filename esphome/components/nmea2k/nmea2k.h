@@ -48,7 +48,7 @@ class Nmea2kComponent : public Component {
     void set_esphome_update_period(int period);
     
  protected:
-    void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice);
+    void print_device(const tNMEA2000::tDevice *pDevice);
     InternalGPIOPin *can_rx_pin_;
     InternalGPIOPin *can_tx_pin_;
     unsigned long can_recovery_period_ = 0;
