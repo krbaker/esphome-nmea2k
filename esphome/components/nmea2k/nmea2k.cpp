@@ -79,19 +79,16 @@ void Nmea2kComponent::setup() {
 void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
   if ( pDevice == 0 ) return;
 
-  Serial.println("----------------------------------------------------------------------");
-  Serial.println(pDevice->GetModelID());
-  Serial.print("  Source: "); Serial.println(pDevice->GetSource());
-  Serial.print("  Manufacturer code:        "); Serial.println(pDevice->GetManufacturerCode());
-  Serial.print("  Unique number:            "); Serial.println(pDevice->GetUniqueNumber());
-  Serial.print("  Software version:         "); Serial.println(pDevice->GetSwCode());
-  Serial.print("  Model version:            "); Serial.println(pDevice->GetModelVersion());
-  Serial.print("  Manufacturer Information: "); PrintText(pDevice->GetManufacturerInformation());
-  Serial.print("  Installation description1: "); PrintText(pDevice->GetInstallationDescription1());
-  Serial.print("  Installation description2: "); PrintText(pDevice->GetInstallationDescription2());
-  PrintUlongList("  Transmit PGNs :",pDevice->GetTransmitPGNs());
-  PrintUlongList("  Receive PGNs  :",pDevice->GetReceivePGNs());
-  Serial.println();
+  ESP_LOGD(TAG,"Found Device                 %s", pDevice->GetModelID());
+  ESP_LOGD(TAG,"  Name:                      %s", pDevice->GetDeviceName());
+  ESP_LOGD(TAG,"  Source:                    %d", pDevice->GetSource());
+  ESP_LOGD(TAG,"  Manufacturer code:         %d", pDevice->GetManufacturerCode());
+  ESP_LOGD(TAG,"  Unique number:             %d", pDevice->GetUniqueNumber());
+  ESP_LOGD(TAG,"  Software version:          %s", pDevice->GetSwCode());
+  ESP_LOGD(TAG,"  Model version:             %s", pDevice->GetModelVersion());
+  ESP_LOGD(TAG,"  Manufacturer Information:  %s", pDevice->GetManufacturerInformation());
+  ESP_LOGD(TAG,"  Installation description1: %s", pDevice->GetInstallationDescription1());
+  ESP_LOGD(TAG,"  Installation description2: %s", pDevice->GetInstallationDescription2());
 }
 
 void Nmea2kComponent::set_nmea2k_device_id(uint32_t id) {
