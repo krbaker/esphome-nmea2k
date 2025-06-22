@@ -76,7 +76,7 @@ void Nmea2kComponent::setup() {
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
 
-void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice, u_int8_t network_id) {
+void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice, uint8_t network_id) {
   if ( pDevice == 0 ) return;
 
   ESP_LOGI(TAG,"Found Device                 %s", pDevice->GetModelID());
