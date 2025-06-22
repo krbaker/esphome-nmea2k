@@ -86,7 +86,7 @@ void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
   ESP_LOGI(TAG,"  Unique number:             %d", pDevice->GetUniqueNumber());
   // ESP_LOGI(TAG,"  Software version:          %s", pDevice->GetSwCode());
   // ESP_LOGI(TAG,"  Model version:             %s", pDevice->GetModelVersion());
-  /ESP_LOGI(TAG,"  Manufacturer Information:  %s", pDevice->GetManufacturerInformation());
+  ESP_LOGI(TAG,"  Manufacturer Information:  %s", pDevice->GetManufacturerInformation());
   // ESP_LOGI(TAG,"  Installation description1: %s", pDevice->GetInstallationDescription1());
   // ESP_LOGI(TAG,"  Installation description2: %s", pDevice->GetInstallationDescription2());
 }
