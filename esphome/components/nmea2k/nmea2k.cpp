@@ -79,16 +79,16 @@ void Nmea2kComponent::setup() {
 void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
   if ( pDevice == 0 ) return;
 
-  ESP_LOGI(TAG,"Found Device                 %s", pDevice->GetModelID());
-  ESP_LOGI(TAG,"  Product Code:              %d", pDevice->GetProductCode());
-  ESP_LOGI(TAG,"  Source:                    %d", pDevice->GetSource());
+  // ESP_LOGI(TAG,"Found Device                 %s", pDevice->GetModelID());
+  // ESP_LOGI(TAG,"  Product Code:              %d", pDevice->GetProductCode());
+  // ESP_LOGI(TAG,"  Source:                    %d", pDevice->GetSource());
   ESP_LOGI(TAG,"  Manufacturer code:         %d", pDevice->GetManufacturerCode());
   ESP_LOGI(TAG,"  Unique number:             %d", pDevice->GetUniqueNumber());
-  ESP_LOGI(TAG,"  Software version:          %s", pDevice->GetSwCode());
-  ESP_LOGI(TAG,"  Model version:             %s", pDevice->GetModelVersion());
-  ESP_LOGI(TAG,"  Manufacturer Information:  %s", pDevice->GetManufacturerInformation());
-  ESP_LOGI(TAG,"  Installation description1: %s", pDevice->GetInstallationDescription1());
-  ESP_LOGI(TAG,"  Installation description2: %s", pDevice->GetInstallationDescription2());
+  // ESP_LOGI(TAG,"  Software version:          %s", pDevice->GetSwCode());
+  // ESP_LOGI(TAG,"  Model version:             %s", pDevice->GetModelVersion());
+  // ESP_LOGI(TAG,"  Manufacturer Information:  %s", pDevice->GetManufacturerInformation());
+  // ESP_LOGI(TAG,"  Installation description1: %s", pDevice->GetInstallationDescription1());
+  // ESP_LOGI(TAG,"  Installation description2: %s", pDevice->GetInstallationDescription2());
 }
 
 void Nmea2kComponent::set_nmea2k_device_id(uint32_t id) {
