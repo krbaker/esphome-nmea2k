@@ -80,7 +80,7 @@ void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
   if ( pDevice == 0 ) return;
 
   ESP_LOGI(TAG,"Found Device                 %s", pDevice->GetModelID());
-  ESP_LOGI(TAG,"  Name:                      %s", pDevice->GetDeviceName());
+  ESP_LOGI(TAG,"  Product Code:              %d", pDevice->GetProductCode());
   ESP_LOGI(TAG,"  Source:                    %d", pDevice->GetSource());
   ESP_LOGI(TAG,"  Manufacturer code:         %d", pDevice->GetManufacturerCode());
   ESP_LOGI(TAG,"  Unique number:             %d", pDevice->GetUniqueNumber());
