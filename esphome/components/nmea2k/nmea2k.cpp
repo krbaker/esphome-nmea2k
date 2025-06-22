@@ -28,7 +28,7 @@ void Nmea2kComponent::loop() {
     // Log new devices
     if (this->nmea2k_device_list->ReadResetIsListUpdated()) {
         for (uint8_t i = 0; i < N2kMaxBusDevices; i++){
-          print_device(nmea2k_device_list->FindDeviceBySource(i));
+          print_device(nmea2k_device_list->FindDeviceBySource(i), i);
         }
     }
 }
@@ -76,12 +76,12 @@ void Nmea2kComponent::setup() {
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
 
-void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice) {
+void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice, u_int8_t network_id) {
   if ( pDevice == 0 ) return;
 
   ESP_LOGI(TAG,"Found Device                 %s", pDevice->GetModelID());
   ESP_LOGI(TAG,"  Product Code:              %d", pDevice->GetProductCode());
-  // ESP_LOGI(TAG,"  Source:                    %d", pDevice->GetSource());
+  ESP_LOGI(TAG,"  Source:                    %d", network_id);
   ESP_LOGI(TAG,"  Manufacturer code:         %d", pDevice->GetManufacturerCode());
   ESP_LOGI(TAG,"  Unique number:             %d", pDevice->GetUniqueNumber());
   // ESP_LOGI(TAG,"  Software version:          %s", pDevice->GetSwCode());
