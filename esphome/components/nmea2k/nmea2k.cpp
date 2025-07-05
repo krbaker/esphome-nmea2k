@@ -35,45 +35,50 @@ void Nmea2kComponent::loop() {
 
 void Nmea2kComponent::setup() {
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: starting...");
-      // Setup NMEA Here
 
-    // if user doesn't specify device id, use MAC address
-    if (this->nmea2k_device_id_ == 0) {
-      set_id_from_mac();
-    }
+  // if user doesn't specify device id, use MAC address
+  if (this->nmea2k_device_id_ == 0) {
+    set_id_from_mac();
+  }
 
-    n2k = new Nmea2kTwai(
-      (gpio_num_t)this->can_tx_pin_->get_pin(),  // Get the GPIO number for the TX pin
-      (gpio_num_t)this->can_rx_pin_->get_pin(),  // Get the GPIO number for the RX pin
-      this->can_recovery_period_);
+  n2k = new Nmea2kTwai(
+    (gpio_num_t)this->can_tx_pin_->get_pin(),  // Get the GPIO number for the TX pin
+    (gpio_num_t)this->can_rx_pin_->get_pin(),  // Get the GPIO number for the RX pin
+    this->can_recovery_period_);
 
-    n2k->SetN2kCANMsgBufSize(this->can_msg_buffer_size_); // Set the size of the CAN message buffer
-    n2k->SetN2kCANReceiveFrameBufSize(this->can_rx_buffer_size_); // These appear to have no effect with twai
-    n2k->SetN2kCANSendFrameBufSize(this->can_tx_buffer_size_); // These appear to have no effect with twai
+  n2k->SetN2kCANMsgBufSize(this->can_msg_buffer_size_); // Set the size of the CAN message buffer
+  n2k->SetN2kCANReceiveFrameBufSize(this->can_rx_buffer_size_); // These appear to have no effect with twai
+  n2k->SetN2kCANSendFrameBufSize(this->can_tx_buffer_size_); // These appear to have no effect with twai
 
-    // Set product information
-    n2k->SetProductInformation(std::to_string(nmea2k_product_serial_).c_str(),    // Manufacturer's Model serial code
-                                this->nmea2k_product_code_,     // Manufacturer's product code
-                                this->nmea2k_firmware_version_.c_str(),  // Manufacturer's Model ID
-                                this->nmea2k_firmware_type_.c_str(),    // Manufacturer's Software version code
-                                this->nmea2k_product_name_.c_str(),         // Manufacturer's Model version,
-                                this->nmea2k_product_load_,    // Load Equivalency Number (LEN) of the product
-                                this->nmea2k_version_,         // Version
-                                this->nmea2k_certification_   // Certification level
+  // Set product information
+  n2k->SetProductInformation(std::to_string(nmea2k_product_serial_).c_str(),    // Manufacturer's Model serial code
+                              this->nmea2k_product_code_,     // Manufacturer's product code
+                              this->nmea2k_firmware_version_.c_str(),  // Manufacturer's Model ID
+                              this->nmea2k_firmware_type_.c_str(),    // Manufacturer's Software version code
+                              this->nmea2k_product_name_.c_str(),         // Manufacturer's Model version,
+                              this->nmea2k_product_load_,    // Load Equivalency Number (LEN) of the product
+                              this->nmea2k_version_,         // Version
+                              this->nmea2k_certification_   // Certification level
+                              );
+  // Set device information
+  n2k->SetDeviceInformation(this->nmea2k_device_id_, // Unique number. Use e.g. Serial number. Id is generated from MAC-Address
+                            this->nmea2k_device_function_, // Device function=Analog to NMEA 2000 Gateway. See codes on http://www.nmea.org/Assets/20120726%20nmea%202000%20class%20&%20function%20codes%20v%202.00.pdf
+                            this->nmea2k_device_class_, // Device class=Inter/Intranetwork Device. See codes on  http://www.nmea.org/Assets/20120726%20nmea%202000%20class%20&%20function%20codes%20v%202.00.pdf
+                            this->nmea2k_manufacturer_id_ // Just choosen free from code list on http://www.nmea.org/Assets/20121020%20nmea%202000%20registration%20list.pdf
                                 );
-    // Set device information
-    n2k->SetDeviceInformation(this->nmea2k_device_id_, // Unique number. Use e.g. Serial number. Id is generated from MAC-Address
-                              this->nmea2k_device_function_, // Device function=Analog to NMEA 2000 Gateway. See codes on http://www.nmea.org/Assets/20120726%20nmea%202000%20class%20&%20function%20codes%20v%202.00.pdf
-                              this->nmea2k_device_class_, // Device class=Inter/Intranetwork Device. See codes on  http://www.nmea.org/Assets/20120726%20nmea%202000%20class%20&%20function%20codes%20v%202.00.pdf
-                              this->nmea2k_manufacturer_id_ // Just choosen free from code list on http://www.nmea.org/Assets/20121020%20nmea%202000%20registration%20list.pdf
-                                  );
-                                 
-    n2k->SetMode(tNMEA2000::N2km_ListenAndNode, NodeAddress);
-    n2k->SetForwardOwnMessages(false);
-    n2k->SetHeartbeatIntervalAndOffset(this->nmea2k_heartbeat_period_); // Set the heartbeat period in milliseconds
-    nmea2k_device_list = new tN2kDeviceList(n2k);
-    n2k->Open();
+                                
+  n2k->SetMode(tNMEA2000::N2km_ListenAndNode, NodeAddress);
+  n2k->SetForwardOwnMessages(false);
+  n2k->SetHeartbeatIntervalAndOffset(this->nmea2k_heartbeat_period_); // Set the heartbeat period in milliseconds
+  nmea2k_device_list = new tN2kDeviceList(n2k);
+  new handle129026(n2k);
+  new handle129026(n2k);
+  n2k->Open();
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
+}
+
+void Nmea2kComponent::register_device(u_int32_t id , std::string name, std::vector<std::string> pgns) {
+  ESP_LOGCONFIG(TAG, "Nmea2k: Capturing PGNS from %d, %s", id, device_name.c_str());
 }
 
 void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice, uint8_t network_id) {

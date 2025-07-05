@@ -116,8 +116,9 @@ async def to_code(config):
     if CONF_DEVICES in config:
         for device in config[CONF_DEVICES]:
             name = device[CONF_NAME]
+            id = device[CONF_DEVICE_ID]
             pgns = device[CONF_PGNS]
-            cg.add(var.register_device(name, pgns))
+            cg.add(var.register_device(id, name, pgns))
             active_pgns.update(pgns)
     for pgn in active_pgns:
         cg.add_build_flag(f"-DNMEA2K_PGN_{pgn.upper()}")

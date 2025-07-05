@@ -46,6 +46,7 @@ class Nmea2kComponent : public Component {
     void set_nmea2k_firmware_type(std::string type);
     void set_nmea2k_firmware_version(std::string version);
     void set_esphome_update_period(int period);
+    void register_device(u_int32_t id, std::string name, std::vector<std::string> pgns);
     
  protected:
     void print_device(const tNMEA2000::tDevice *pDevice, uint8_t network_id);
@@ -72,10 +73,26 @@ class Nmea2kComponent : public Component {
     Nmea2kTwai *n2k;
     int NodeAddress = 32;
     tN2kDeviceList *nmea2k_device_list;
-#ifdef NMEA2K_PGN_POSITIONRAPID
-#error "Not yet implemented"
+
+#ifdef NMEA2K_COGSOGRAPID
+  class handle_COGSOGRAPID : public tNMEA2000::tMsgHandler{
+    private:
+    public:
+
+      double COG = 0;
+      double SOG = 0;
+      tN2kHeadingReference ref = tN2kHeadingReference::N2kHeadingReference_Unknown;
+      unsigned char SID = 0;
+
+      handleCOSSOGRAPID(tNMEA2000 *_pNMEA2000) : tNMEA2000::tMsgHandler(129026,_pNMEA2000) {}
+      void HandleMsg(const tN2kMsg &n2kMsg){
+        ParseN2kPGN129026(n2kMsg, SID, ref, COG, SOG);
+      };
+  };
+  handle_COGSOGRAPID *cogsograpid;
 #endif
 };
+
 
 }  // namespace nmea2k
 }  // namespace esphome
