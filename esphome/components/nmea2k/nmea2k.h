@@ -126,35 +126,43 @@ class Nmea2kComponent : public Component {
     Nmea2kTwai *n2k;
     int NodeAddress = 32;
     tN2kDeviceList *nmea2k_device_list;
-    std::unordered_map<int, std::string> names;
+    std::unordered_map<u_int32_t, std::string> names;
+    std::unordered_map<pgns, std::unordered_set<u_int32_t>> pgn_device_id_map;
 
-    // class espMsgHandler : public tNMEA2000::tMsgHandler {
-    //   private:
-    //     std::unordered_set<int> enabled_ids;  // Set of enabled IDs to filter messages
-    //     std::unordered_map<int, std::string> *names;  // Map of IDs to names for logging
-    //   public:
-    //     espMsgHandler(tNMEA2000 *_pNMEA2000, std::unordered_set enabled_ids, const std::unordered_map<int, std::string> &names) : tNMEA2000::tMsgHandler(126208, _pNMEA2000) {}
-    //     void Publish(const tN2kMsg &n2kMsg) {
-    //       // check to see if the message is from an enabled ID
-    //       // Push to esphome values
-
-    //     }
-    // };
+    class espMsgHandler : public tNMEA2000::tMsgHandler {
+      private:
+        virtual std::string getEspName() const = 0;
+        const std::unordered_set<u_int32_t> *enabled_ids;
+        const std::unordered_map<u_int32_t, std::string> *device_names;
+      public:
+        virtual pgns getPgnId() const = 0;
+        espMsgHandler(tNMEA2000 *_pNMEA2000, 
+          std::unordered_set<u_int32_t> *ids, 
+          std::unordered_map<u_int32_t, std::string> *names) 
+          : tNMEA2000::tMsgHandler(126208, _pNMEA2000),
+          enabled_ids(ids), device_names(names) {}
+        void espPublish(const tN2kMsg &n2kMsg) {
+          getEspName();
+        }
+    };
 
 #ifdef NMEA2K_COGSOGRAPID
-    class handle_COGSOGRAPID : public tNMEA2000::tMsgHandler {
+    class handle_COGSOGRAPID : public espMsgHandler {
       private:
+        std::string getEspName() const override { return std::string("cogsograpid"); }
       public:
-
         double COG = 0;
         double SOG = 0;
         tN2kHeadingReference ref = tN2kHeadingReference::N2kHeadingReference_Unknown;
         unsigned char SID = 0;
 
-        handleCOSSOGRAPID(tNMEA2000 *_pNMEA2000) : tNMEA2000::tMsgHandler(129026,_pNMEA2000) {}
+        handle_COGSOGRAPID(tNMEA2000 *_pNMEA2000, 
+          std::unordered_set<u_int32_t> *ids, 
+          std::unordered_map<u_int32_t, std::string> *names)
+         : espMsgHandler(_pNMEA2000, ids, names) {}
         void HandleMsg(const tN2kMsg &n2kMsg){
           ParseN2kPGN129026(n2kMsg, SID, ref, COG, SOG);
-  //        Publish(n2kMsg);
+          espPublish(n2kMsg);
         };
     };
     handle_COGSOGRAPID *cogsograpid;
