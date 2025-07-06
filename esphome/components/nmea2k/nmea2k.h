@@ -1,6 +1,8 @@
 #ifndef _NMEA2K_H
 #define _NMEA2K_H
 
+#include <unordered_set>
+
 #include "esphome/core/component.h"
 #include "esphome/core/hal.h"
 #include "esphome/core/log.h"
