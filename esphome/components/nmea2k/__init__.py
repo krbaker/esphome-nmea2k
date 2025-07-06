@@ -149,7 +149,7 @@ SENSOR_KEYS = {
         icon="mdi:alert-circle"
     ),
     "tx_timeouts": sensor.sensor_schema(
-        name="NMEA 2000 TX Timeouts"
+        name="NMEA 2000 TX Timeouts",
         unit_of_measurement="", 
         accuracy_decimals=0,
         entity_category="diagnostic",
