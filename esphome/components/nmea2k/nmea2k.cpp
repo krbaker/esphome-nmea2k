@@ -71,15 +71,16 @@ void Nmea2kComponent::setup() {
   n2k->SetForwardOwnMessages(false);
   n2k->SetHeartbeatIntervalAndOffset(this->nmea2k_heartbeat_period_); // Set the heartbeat period in milliseconds
   nmea2k_device_list = new tN2kDeviceList(n2k);
-#ifdef NMEA2K_COGSOGRAPID                              
+#ifdef NMEA2K_COGSOGRAPID
   new handle_COGSOGRAPID(n2k);
 #endif
   n2k->Open();
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
 
-void Nmea2kComponent::register_device(u_int32_t id , std::string name, std::vector<std::string> pgns) {
+void Nmea2kComponent::register_device(u_int32_t id , std::string name, std::vector<pgns> active_pgns) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Capturing PGNS from %d, %s", id, device_name.c_str());
+  names.insert({id, device_name});
 }
 
 void Nmea2kComponent::print_device(const tNMEA2000::tDevice *pDevice, uint8_t network_id) {

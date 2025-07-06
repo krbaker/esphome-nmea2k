@@ -37,6 +37,61 @@ MULTI_CONF = True
 CONF_RADSENS_ID = "nmea2k_id"
 
 nmea2k_ns = cg.esphome_ns.namespace("nmea2k")
+nmea_pgns = nmea2k_ns.enum('pgns')
+PGNS = {
+  "SystemTime": nmea_pgns.SYSTEMTIME,
+  "AISSafetyRelatedBroadcast": nmea_pgns.AISSAFETYRELATEDBROADCAST,
+  "MOBNotification": nmea_pgns.MOBNOTIFICATION,
+  "HeadingTrackControl": nmea_pgns.HEADINGTRACKCONTROL,
+  "Rudder": nmea_pgns.RUDDER,
+  "Heading": nmea_pgns.HEADING,
+  "RateOfTurn": nmea_pgns.RATEOFTURN,
+  "Heave": nmea_pgns.HEAVE,
+  "Additude": nmea_pgns.ADDITUDE,
+  "MagneticVariation": nmea_pgns.MAGNETICVARIATION,
+  "EngineParamRapid": nmea_pgns.ENGINEPARAMRAPID,
+  "EngineDynamicParam": nmea_pgns.ENGINEDYNAMICPARAM,
+  "TransmissionParameters": nmea_pgns.TRANSMISSIONPARAMETERS,
+  "EngineTripParameters": nmea_pgns.ENGINETRIPPARAMETERS,
+  "BinaryStatus": nmea_pgns.BINARYSTATUS,
+  "SwitchbankControl": nmea_pgns.SWITCHBANKCONTROL,
+  "FluidLevel": nmea_pgns.FLUIDLEVEL,
+  "DCStatus": nmea_pgns.DCSTATUS,
+  "ChargerStatus": nmea_pgns.CHARGERSTATUS,
+  "DCBatStatus": nmea_pgns.DCBATSTATUS,
+  "ChargerConf": nmea_pgns.CHARGERCONF,
+  "BatConf": nmea_pgns.BATCONF,
+  "DCConvStatus": nmea_pgns.DCCONVSTATUS,
+  "DCVoltageCurrent": nmea_pgns.DCVOLTAGECURRENT,
+  "Leeway": nmea_pgns.LEEWAY,
+  "BoatSpeed": nmea_pgns.BOATSPEED,
+  "WaterDepth": nmea_pgns.WATERDEPTH,
+  "DistanceLog": nmea_pgns.DISTANCELOG,
+  "PositionRapid": nmea_pgns.POSITIONRAPID,
+  "COGSOGRapid": nmea_pgns.COGSOGRAPID,
+  "GNSS": nmea_pgns.GNSS,
+  "LocalOffset": nmea_pgns.LOCALOFFSET,
+  "AISClassAPosition": nmea_pgns.AISCLASSAPOSITION,
+  "AISClassBPosition": nmea_pgns.AISCLASSBPOSITION,
+  "AISAtoNReport": nmea_pgns.AISATONREPORT,
+  "XTE": nmea_pgns.XTE,
+  "NavigationInfo": nmea_pgns.NAVIGATIONINFO,
+  "GNSSDOPData": nmea_pgns.GNSSDOPDATA,
+  "GNSSSatellitesInView": nmea_pgns.GNSSSATELLITESINVIEW,
+  "AISClassAStatic": nmea_pgns.AISCLASSASTATIC,
+  "AISClassBStaticPartA": nmea_pgns.AISCLASSBSTATICPARTA,
+  "AISClassBStaticPartB": nmea_pgns.AISCLASSBSTATICPARTB,
+  "WindSpeed": nmea_pgns.WINDSPEED,
+  "OutsideEnvironmentalParameters": nmea_pgns.OUTSIDEENVIRONMENTALPARAMETERS,
+  "EnvironmentalParameters": nmea_pgns.ENVIRONMENTALPARAMETERS,
+  "Temperature": nmea_pgns.TEMPERATURE,
+  "TemperatureExt": nmea_pgns.TEMPERATUREEXT,
+  "Humidity": nmea_pgns.HUMIDITY,
+  "Pressure": nmea_pgns.PRESSURE,
+  "MeteorlogicalStationData": nmea_pgns.METEORLOGICALSTATIONDATA,
+  "TrimTab": nmea_pgns.TRIMTAB,
+  "DirectionData": nmea_pgns.DIRECTIONDATA,
+}
 
 Nmea2kComponent = nmea2k_ns.class_(
     "Nmea2kComponent", cg.Component 
@@ -45,7 +100,7 @@ Nmea2kComponent = nmea2k_ns.class_(
 DEVICE_SCHEMA = cv.Schema({
     cv.Required(CONF_NAME): cv.string,
     cv.Required(CONF_DEVICE_ID): cv.positive_int,
-    cv.Required(CONF_PGNS): cv.ensure_list(cv.string),
+    cv.Required(CONF_PGNS): cv.ensure_list(cv.enum(PGNS, upper=False)),
 })
 
 CONFIG_SCHEMA = (

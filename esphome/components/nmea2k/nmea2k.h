@@ -17,7 +17,60 @@
 namespace esphome {
 namespace nmea2k {
 
-
+enum pgns {
+  SYSTEMTIME,
+  AISSAFETYRELATEDBROADCAST,
+  MOBNOTIFICATION,
+  HEADINGTRACKCONTROL,
+  RUDDER,
+  HEADING,
+  RATEOFTURN,
+  HEAVE,
+  ADDITUDE,
+  MAGNETICVARIATION,
+  ENGINEPARAMRAPID,
+  ENGINEDYNAMICPARAM,
+  TRANSMISSIONPARAMETERS,
+  ENGINETRIPPARAMETERS,
+  BINARYSTATUS,
+  SWITCHBANKCONTROL,
+  FLUIDLEVEL,
+  DCSTATUS,
+  CHARGERSTATUS,
+  DCBATSTATUS,
+  CHARGERCONF,
+  BATCONF,
+  DCCONVSTATUS,
+  DCVOLTAGECURRENT,
+  LEEWAY,
+  BOATSPEED,
+  WATERDEPTH,
+  DISTANCELOG,
+  POSITIONRAPID,
+  COGSOGRAPID,
+  GNSS,
+  LOCALOFFSET,
+  AISCLASSAPOSITION,
+  AISCLASSBPOSITION,
+  AISATONREPORT,
+  XTE,
+  NAVIGATIONINFO,
+  GNSSDOPDATA,
+  GNSSSATELLITESINVIEW,
+  AISCLASSASTATIC,
+  AISCLASSBSTATICPARTA,
+  AISCLASSBSTATICPARTB,
+  WINDSPEED,
+  OUTSIDEENVIRONMENTALPARAMETERS,
+  ENVIRONMENTALPARAMETERS,
+  TEMPERATURE,
+  TEMPERATUREEXT,
+  HUMIDITY,
+  PRESSURE,
+  METEORLOGICALSTATIONDATA,
+  TRIMTAB,
+  DIRECTIONDATA,
+};
 class Nmea2kComponent : public Component {
   public:
     Nmea2kComponent() = default;
@@ -73,23 +126,38 @@ class Nmea2kComponent : public Component {
     Nmea2kTwai *n2k;
     int NodeAddress = 32;
     tN2kDeviceList *nmea2k_device_list;
+    std::unordered_map<int, std::string> names;
+
+    // class espMsgHandler : public tNMEA2000::tMsgHandler {
+    //   private:
+    //     std::unordered_set<int> enabled_ids;  // Set of enabled IDs to filter messages
+    //     std::unordered_map<int, std::string> *names;  // Map of IDs to names for logging
+    //   public:
+    //     espMsgHandler(tNMEA2000 *_pNMEA2000, std::unordered_set enabled_ids, const std::unordered_map<int, std::string> &names) : tNMEA2000::tMsgHandler(126208, _pNMEA2000) {}
+    //     void Publish(const tN2kMsg &n2kMsg) {
+    //       // check to see if the message is from an enabled ID
+    //       // Push to esphome values
+
+    //     }
+    // };
 
 #ifdef NMEA2K_COGSOGRAPID
-  class handle_COGSOGRAPID : public tNMEA2000::tMsgHandler{
-    private:
-    public:
+    class handle_COGSOGRAPID : public tNMEA2000::tMsgHandler {
+      private:
+      public:
 
-      double COG = 0;
-      double SOG = 0;
-      tN2kHeadingReference ref = tN2kHeadingReference::N2kHeadingReference_Unknown;
-      unsigned char SID = 0;
+        double COG = 0;
+        double SOG = 0;
+        tN2kHeadingReference ref = tN2kHeadingReference::N2kHeadingReference_Unknown;
+        unsigned char SID = 0;
 
-      handleCOSSOGRAPID(tNMEA2000 *_pNMEA2000) : tNMEA2000::tMsgHandler(129026,_pNMEA2000) {}
-      void HandleMsg(const tN2kMsg &n2kMsg){
-        ParseN2kPGN129026(n2kMsg, SID, ref, COG, SOG);
-      };
-  };
-  handle_COGSOGRAPID *cogsograpid;
+        handleCOSSOGRAPID(tNMEA2000 *_pNMEA2000) : tNMEA2000::tMsgHandler(129026,_pNMEA2000) {}
+        void HandleMsg(const tN2kMsg &n2kMsg){
+          ParseN2kPGN129026(n2kMsg, SID, ref, COG, SOG);
+  //        Publish(n2kMsg);
+        };
+    };
+    handle_COGSOGRAPID *cogsograpid;
 #endif
 };
 
