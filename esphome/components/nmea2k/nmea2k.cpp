@@ -78,7 +78,7 @@ void Nmea2kComponent::setup() {
   ESP_LOGCONFIG(TAG, "Nmea2k Setup: Complete...");
 }
 
-void Nmea2kComponent::register_device(u_int32_t id , std::string name, std::vector<pgns> active_pgns) {
+void Nmea2kComponent::register_device(u_int32_t id , std::string device_name, std::vector<pgns> active_pgns) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Capturing PGNS from %d, %s", id, device_name.c_str());
   names.insert({id, device_name});
 }
