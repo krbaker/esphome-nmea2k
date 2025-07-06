@@ -80,7 +80,7 @@ void Nmea2kComponent::setup() {
 
 void Nmea2kComponent::register_device(u_int32_t id , std::string device_name, std::vector<pgns> active_pgns) {
   ESP_LOGCONFIG(TAG, "Nmea2k: Capturing PGNS from %d, %s", id, device_name.c_str());
-  device_names.insert({id, device_name});
+  names.insert({id, device_name});
   // for every pgn active, add it to a list of for the pgn
   for (pgns p: active_pgns){
     pgn_device_id_map[p].insert(id);
