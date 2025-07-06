@@ -1,6 +1,7 @@
 from esphome import pins
 import esphome.codegen as cg
 import esphome.config_validation as cv
+from esphome.components import sensor
 from esphome.const import (
     CONF_ID,
 )
@@ -97,6 +98,66 @@ Nmea2kComponent = nmea2k_ns.class_(
     "Nmea2kComponent", cg.Component 
 )
 
+SENSOR_KEYS = {
+    "n2kstatus": sensor.sensor_schema(
+        name="NMEA 2000 Status",
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        icon="mdi:gauge",
+        entity_category="diagnostic"
+        ),
+    "n2kaddress": sensor.sensor_schema(
+        name="NMEA 2000 Address",
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        icon="mdi:sign-real-estate",
+        entity_category="diagnostic"
+    ),
+    "rx_error_counter": sensor.sensor_schema(
+        name="NMEA 2000 RX Errors",
+        unit_of_measurement="", 
+        accuracy_decimal=0,
+        icon="mdi:alert-circle",
+        entity_category="diagnostic"
+    ),
+    "tx_error_counter": sensor.sensor_schema(
+        name="NMEA 2000 TX Errors",
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        icon="mdi:alert-circle",
+        entity_category="diagnostic"
+    ),
+    "tx_failed": sensor.sensor_schema(
+    name="NMEA 2000 TX Failures",
+    unit_of_measurement="", 
+    accuracy_decimals=0,
+    icon="mdi:alert-circle",
+    entity_category="diagnostic"
+    ),
+    "rx_missed": sensor.sensor_schema(
+        name="NMEA 2000 RX Missed",
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        icon="mdi:alert-circle",
+        entity_category="diagnostic"
+    ),
+    "rx_overrun": sensor.sensor_schema(
+        name="NMEA 2000 RX Overrun",
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        entity_category="diagnostic",
+        icon="mdi:alert-circle"
+    ),
+    "tx_timeouts": sensor.sensor_schema(
+        name="NMEA 2000 TX Timeouts"
+        unit_of_measurement="", 
+        accuracy_decimals=0,
+        entity_category="diagnostic",
+        icon="mdi:alert-circle"
+    )
+}
+
+
 DEVICE_SCHEMA = cv.Schema({
     cv.Required(CONF_NAME): cv.string,
     cv.Required(CONF_DEVICE_ID): cv.positive_int,
@@ -127,7 +188,10 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_NMEA2K_HEARTBEAT_PERIOD, default=5000): cv.positive_int,
             cv.Optional(CONF_CAN_RECOVERY_PERIOD, default=3000): cv.positive_int,
             cv.Optional(CONF_ESPHOME_UPDATE_PERIOD, default=500): cv.positive_int,
-            cv.Optional(CONF_DEVICES): cv.ensure_list(DEVICE_SCHEMA)
+            cv.Optional(CONF_DEVICES): cv.ensure_list(DEVICE_SCHEMA),
+            cv.Optional("sensors"): cv.Schema({
+                key: SENSOR_KEYS[key] for key in SENSOR_KEYS
+            })
         }
     )
 )
@@ -177,3 +241,6 @@ async def to_code(config):
             active_pgns.update(pgns)
     for pgn in active_pgns:
         cg.add_build_flag(f"-DNMEA2K_PGN_{pgn.upper()}")
+    for key in SENSOR_KEYS:
+        sens = await sensor.new_sensor(config["sensors"][key])
+        cg.add(getattr(var, f"set_{key}_sensor")(sens))
