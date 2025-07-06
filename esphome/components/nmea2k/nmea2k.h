@@ -99,7 +99,7 @@ class Nmea2kComponent : public Component {
     void set_nmea2k_firmware_type(std::string type);
     void set_nmea2k_firmware_version(std::string version);
     void set_esphome_update_period(int period);
-    void register_device(u_int32_t id, std::string name, std::vector<std::string> pgns);
+    void register_device(u_int32_t id, std::string name, std::vector<pgns> active_pgns);
     
  protected:
     void print_device(const tNMEA2000::tDevice *pDevice, uint8_t network_id);
